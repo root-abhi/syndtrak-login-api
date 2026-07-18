@@ -14,6 +14,14 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
+app.use((req, res, next) => {
+  const start = Date.now();
+  res.on('finish', () => {
+    console.log(`[${new Date().toISOString()}] ${req.method} ${req.path} ${res.statusCode} ${Date.now() - start}ms`);
+  });
+  next();
+});
+
 const JWT_SECRET = process.env.JWT_SECRET || 'syndtrak-secret-change-in-prod';
 const PORT = process.env.PORT || 3000;
 
